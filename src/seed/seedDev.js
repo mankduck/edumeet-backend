@@ -24,7 +24,7 @@ async function seedDevData() {
     console.log("Đang xóa database dev cũ...");
     await mongoose.connection.dropDatabase();
 
-    const passwordHash = await bcrypt.hash("123456", 10);
+    const passwordHash = await bcrypt.hash("admin0023", 10);
 
     console.log("Đang tạo môn gốc...");
 
@@ -47,14 +47,14 @@ async function seedDevData() {
 
     await User.create({
       fullName: "Admin",
-      email: "admin@gmail.com",
+      email: "adminglb@edumeet.com",
       passwordHash,
       role: "ADMIN",
     });
 
     const teacherMath = await User.create({
       fullName: "Nguyễn Văn Nam",
-      email: "teacher@gmail.com",
+      email: "teacher@edumeet.com",
       passwordHash,
       role: "TEACHER",
       subjectId: mathSubject._id,
@@ -63,7 +63,7 @@ async function seedDevData() {
 
     const teacherPhysics = await User.create({
       fullName: "Trần Minh Anh",
-      email: "physics.teacher@gmail.com",
+      email: "physics.teacher@edumeet.com",
       passwordHash,
       role: "TEACHER",
       subjectId: physicsSubject._id,
