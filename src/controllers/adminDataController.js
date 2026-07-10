@@ -7,7 +7,6 @@ import Subject from "../models/Subject.js";
 import User from "../models/User.js";
 import {
   createGoogleMeetEvent,
-  getGoogleCalendarEvent,
 } from "../services/googleCalendarService.js";
 import Notification from "../models/Notification.js";
 import bcrypt from "bcryptjs";
