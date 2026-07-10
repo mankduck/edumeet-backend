@@ -8,15 +8,34 @@ import studentDataRoutes from "./routes/studentDataRoutes.js";
 
 const app = express();
 
+const allowedOrigins = [
+  // "http://localhost:5173",
+  "https://edumeet-vn.netlify.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://edumeet-vn.netlify.app",
-    ],
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked: ${origin}`));
+    },
     credentials: true,
+    methods: ["GET", "POST"],
   })
 );
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://edumeet-vn.netlify.app",
+//     ],
+//     credentials: true,
+//     methods: ["GET", "POST"],
+//   })
+// );
 
 app.use(express.json());
 
