@@ -23,7 +23,7 @@ app.use(
       return callback(new Error(`CORS blocked: ${origin}`));
     },
     credentials: true,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 // app.use(
