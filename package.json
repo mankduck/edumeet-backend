@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
-    "start": "cross-env NODE_ENV=production node src/server.js",
-    "seed:dev": "cross-env NODE_ENV=development node src/seed/seedDev.js"
+    "start": "node src/server.js",
+    "seed:dev": "node src/seed/seedDev.js"
   },
   "keywords": [],
   "author": "",
