@@ -5,7 +5,10 @@ import LessonFile from "../models/LessonFile.js";
 import MeetSession from "../models/MeetSession.js";
 import Subject from "../models/Subject.js";
 import User from "../models/User.js";
-import { createGoogleMeetEvent } from "../services/googleCalendarService.js";
+import {
+  createGoogleMeetEvent,
+  getGoogleCalendarEvent,
+} from "../services/googleCalendarService.js";
 import Notification from "../models/Notification.js";
 import bcrypt from "bcryptjs";
 
@@ -1200,4 +1203,204 @@ export async function updateUserAccountStatus(req, res) {
             message: "Lỗi server khi cập nhật trạng thái tài khoản",
         });
     }
+}
+
+export async function updateTeacher(req, res) {
+  try {
+    if (!requireAdmin(req, res)) return;
+
+    const { teacherId } = req.params;
+    const {
+      fullName,
+      email,
+      password,
+      phone,
+      facebookUrl,
+      subjectId,
+      status,
+    } = req.body;
+
+    const teacher = await User.findById(teacherId);
+
+    if (!teacher || teacher.role !== "TEACHER") {
+      return res.status(404).json({
+        message: "Không tìm thấy giáo viên",
+      });
+    }
+
+    if (email && email.toLowerCase().trim() !== teacher.email) {
+      const existed = await User.findOne({
+        email: email.toLowerCase().trim(),
+        _id: { $ne: teacher._id },
+      });
+
+      if (existed) {
+        return res.status(400).json({
+          message: "Email này đã được sử dụng",
+        });
+      }
+
+      teacher.email = email.toLowerCase().trim();
+    }
+
+    if (subjectId) {
+      const subject = await Subject.findById(subjectId);
+
+      if (!subject) {
+        return res.status(400).json({
+          message: "Môn học không hợp lệ",
+        });
+      }
+
+      teacher.subjectId = subjectId;
+
+      // Đồng bộ lại môn của toàn bộ lớp mà giáo viên này đang dạy.
+      await ClassRoom.updateMany(
+        { teacherId: teacher._id },
+        { subjectId }
+      );
+    }
+
+    if (fullName !== undefined) teacher.fullName = fullName;
+    if (phone !== undefined) teacher.phone = phone;
+    if (facebookUrl !== undefined) teacher.facebookUrl = facebookUrl;
+
+    if (status && ["ACTIVE", "INACTIVE"].includes(status)) {
+      teacher.status = status;
+    }
+
+    if (password) {
+      teacher.passwordHash = await bcrypt.hash(password, 10);
+    }
+
+    await teacher.save();
+
+    return res.json({
+      message: "Cập nhật giáo viên thành công",
+    });
+  } catch (error) {
+    console.error("Update teacher error:", error);
+
+    return res.status(500).json({
+      message: "Lỗi server khi cập nhật giáo viên",
+    });
+  }
+}
+
+export async function updateStudent(req, res) {
+  try {
+    if (!requireAdmin(req, res)) return;
+
+    const { studentId } = req.params;
+    const { fullName, email, password, phone, facebookUrl, status } = req.body;
+
+    const student = await User.findById(studentId);
+
+    if (!student || student.role !== "STUDENT") {
+      return res.status(404).json({
+        message: "Không tìm thấy học sinh",
+      });
+    }
+
+    if (email && email.toLowerCase().trim() !== student.email) {
+      const existed = await User.findOne({
+        email: email.toLowerCase().trim(),
+        _id: { $ne: student._id },
+      });
+
+      if (existed) {
+        return res.status(400).json({
+          message: "Email này đã được sử dụng",
+        });
+      }
+
+      student.email = email.toLowerCase().trim();
+    }
+
+    if (fullName !== undefined) student.fullName = fullName;
+    if (phone !== undefined) student.phone = phone;
+    if (facebookUrl !== undefined) student.facebookUrl = facebookUrl;
+
+    if (status && ["ACTIVE", "INACTIVE"].includes(status)) {
+      student.status = status;
+    }
+
+    if (password) {
+      student.passwordHash = await bcrypt.hash(password, 10);
+    }
+
+    await student.save();
+
+    return res.json({
+      message: "Cập nhật học sinh thành công",
+    });
+  } catch (error) {
+    console.error("Update student error:", error);
+
+    return res.status(500).json({
+      message: "Lỗi server khi cập nhật học sinh",
+    });
+  }
+}
+
+export async function updateClassRoom(req, res) {
+  try {
+    if (!requireAdmin(req, res)) return;
+
+    const { classId } = req.params;
+    const { name, grade, description, teacherId, status } = req.body;
+
+    const classRoom = await ClassRoom.findById(classId);
+
+    if (!classRoom) {
+      return res.status(404).json({
+        message: "Không tìm thấy lớp học",
+      });
+    }
+
+    if (teacherId) {
+      const teacher = await User.findById(teacherId);
+
+      if (!teacher || teacher.role !== "TEACHER") {
+        return res.status(400).json({
+          message: "Giáo viên không hợp lệ",
+        });
+      }
+
+      if (!teacher.subjectId) {
+        return res.status(400).json({
+          message: "Giáo viên chưa được phân môn học",
+        });
+      }
+
+      classRoom.teacherId = teacher._id;
+      classRoom.subjectId = teacher.subjectId;
+    }
+
+    if (name !== undefined) classRoom.name = name;
+    if (grade !== undefined) classRoom.grade = grade;
+    if (description !== undefined) classRoom.description = description;
+
+    if (status && ["ACTIVE", "UPCOMING", "ARCHIVED"].includes(status)) {
+      classRoom.status = status;
+    }
+
+    await classRoom.save();
+
+    return res.json({
+      message: "Cập nhật lớp học thành công",
+    });
+  } catch (error) {
+    console.error("Update class error:", error);
+
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Giáo viên đã có lớp trùng tên này",
+      });
+    }
+
+    return res.status(500).json({
+      message: "Lỗi server khi cập nhật lớp học",
+    });
+  }
 }

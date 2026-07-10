@@ -12,7 +12,12 @@ import {
     getTeachersPage,
     removeStudentFromClass,
     searchStudentsForClass,
+    syncAllMeetSessionsFromGoogle,
+    syncMeetSessionFromGoogle,
+    updateClassRoom,
+    updateStudent,
     updateStudentClassStatus,
+    updateTeacher,
     updateUserAccountStatus,
 } from "../controllers/adminDataController.js";
 import {
@@ -62,6 +67,10 @@ router.post("/teachers", createTeacher);
 
 router.get("/students", getStudentsPage);
 router.post("/students", createStudent);
+
+router.patch("/teachers/:teacherId", updateTeacher);
+router.patch("/students/:studentId", updateStudent);
+router.patch("/classes/:classId", updateClassRoom);
 
 router.patch("/users/:userId/status", updateUserAccountStatus);
 router.get("/lessons", getLessonsPage);
