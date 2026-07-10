@@ -5,9 +5,7 @@ import LessonFile from "../models/LessonFile.js";
 import MeetSession from "../models/MeetSession.js";
 import Subject from "../models/Subject.js";
 import User from "../models/User.js";
-import {
-  createGoogleMeetEvent,
-} from "../services/googleCalendarService.js";
+import { createGoogleMeetEvent } from "../services/googleCalendarService.js";
 import Notification from "../models/Notification.js";
 import bcrypt from "bcryptjs";
 

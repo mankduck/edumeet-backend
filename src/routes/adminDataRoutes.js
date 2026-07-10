@@ -12,8 +12,6 @@ import {
     getTeachersPage,
     removeStudentFromClass,
     searchStudentsForClass,
-    syncAllMeetSessionsFromGoogle,
-    syncMeetSessionFromGoogle,
     updateClassRoom,
     updateStudent,
     updateStudentClassStatus,
