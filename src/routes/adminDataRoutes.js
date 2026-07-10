@@ -19,6 +19,18 @@ import {
     updateUserAccountStatus,
 } from "../controllers/adminDataController.js";
 import {
+    addQuizQuestion,
+    createManualQuiz,
+    deleteQuizQuestion,
+    getClassQuizzes,
+    getQuizDetail,
+    updateQuizBasic,
+    updateQuizQuestion,
+    updateQuizStatus,
+    getQuizSubmissions,
+    getQuizSubmissionDetail,
+} from "../controllers/quizController.js";
+import {
     createLesson,
     deleteLessonFile,
     updateLesson,
@@ -74,4 +86,20 @@ router.patch("/users/:userId/status", updateUserAccountStatus);
 router.get("/lessons", getLessonsPage);
 router.get("/meet", getMeetPage);
 
+router.get("/classes/:classId/quizzes", getClassQuizzes);
+router.post("/classes/:classId/quizzes/manual", createManualQuiz);
+
+router.get("/quizzes/:quizId", getQuizDetail);
+router.patch("/quizzes/:quizId", updateQuizBasic);
+router.patch("/quizzes/:quizId/status", updateQuizStatus);
+
+router.get("/quizzes/:quizId/submissions", getQuizSubmissions);
+router.get(
+  "/quizzes/:quizId/submissions/:submissionId",
+  getQuizSubmissionDetail
+);
+
+router.post("/quizzes/:quizId/questions", addQuizQuestion);
+router.patch("/quizzes/:quizId/questions/:questionId", updateQuizQuestion);
+router.delete("/quizzes/:quizId/questions/:questionId", deleteQuizQuestion);
 export default router;

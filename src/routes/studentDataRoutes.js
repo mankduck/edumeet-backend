@@ -7,6 +7,13 @@ import {
 } from "../controllers/studentDataController.js";
 import { allowRoles, protect } from "../middlewares/authMiddleware.js";
 
+import {
+  getStudentClassQuizzes,
+  getStudentQuizResult,
+  startStudentQuiz,
+  submitStudentQuiz,
+} from "../controllers/quizController.js";
+
 const router = express.Router();
 
 router.use(protect);
@@ -16,5 +23,11 @@ router.get("/dashboard", getStudentDashboard);
 router.get("/classes", getStudentClasses);
 router.get("/classes/:classId", getStudentClassDetail);
 router.get("/meet", getStudentMeetSessions);
+
+router.get("/classes/:classId/quizzes", getStudentClassQuizzes);
+
+router.post("/quizzes/:quizId/start", startStudentQuiz);
+router.post("/quizzes/:quizId/submit", submitStudentQuiz);
+router.get("/quizzes/:quizId/result", getStudentQuizResult);
 
 export default router;
