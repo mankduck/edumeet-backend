@@ -16,7 +16,7 @@ const lessonFileSchema = new mongoose.Schema(
 
     fileType: {
       type: String,
-      enum: ["WORD", "EXCEL", "POWERPOINT"],
+      enum: ["WORD", "EXCEL", "POWERPOINT", "PDF", "IMAGE", "VIDEO", "ZIP"],
       required: true,
     },
 
