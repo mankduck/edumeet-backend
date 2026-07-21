@@ -32,6 +32,10 @@ function getFileType(mimeType) {
         return "POWERPOINT";
     }
 
+    if (mimeType === "application/pdf") {
+        return "PDF";
+    }
+
     return null;
 }
 
