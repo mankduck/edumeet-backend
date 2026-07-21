@@ -20,6 +20,9 @@ const allowedMimeTypes = [
   // PowerPoint
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+  //PDF
+  "application/pdf",
 ];
 
 function fileFilter(req, file, cb) {
