@@ -22,7 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "multer": "^2.2.0",
-    "nodemailer": "^9.0.3"
+    "nodemailer": "^9.0.3",
+    "pdfjs-dist": "^5.4.296"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",

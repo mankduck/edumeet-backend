@@ -36,6 +36,10 @@ function getFileType(mimeType) {
         return "PDF";
     }
 
+    if (mimeType.startsWith("audio/")) {
+        return "AUDIO";
+    }
+
     return null;
 }
 

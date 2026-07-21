@@ -23,6 +23,15 @@ const allowedMimeTypes = [
 
   //PDF
   "application/pdf",
+
+     // AUDIO
+    "audio/mpeg",      // .mp3
+    "audio/mp3",
+    "audio/wav",
+    "audio/x-wav",
+    "audio/ogg",
+    "audio/aac",
+    "audio/x-m4a",
 ];
 
 function fileFilter(req, file, cb) {

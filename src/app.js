@@ -5,11 +5,12 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import adminDataRoutes from "./routes/adminDataRoutes.js";
 import googleAuthRoutes from "./routes/googleAuthRoutes.js";
 import studentDataRoutes from "./routes/studentDataRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
 
 const app = express();
 
 const allowedOrigins = [
-  // "http://localhost:5173",
+  "http://localhost:5173",
   "https://edumeet-vn.netlify.app",
 ];
 
@@ -50,5 +51,6 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin-data", adminDataRoutes);
 app.use("/api/student-data", studentDataRoutes);
 app.use("/api/google", googleAuthRoutes);
+app.use("/api",fileRoutes);
 
 export default app;
